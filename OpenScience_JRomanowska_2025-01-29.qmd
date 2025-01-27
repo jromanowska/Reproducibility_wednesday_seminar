@@ -1,0 +1,157 @@
+---
+title: "How to be Open about your Science?"
+author: "Julia Romanowska"
+date: 2025-01-29
+format:
+  revealjs:
+    date-format: "YYYY-MM-DD"
+    theme: sky
+---
+
+```{r}
+#| include: false
+library(fontawesome)
+```
+
+## Discussion {.center}
+
+::: {.r-fit-text}
+go to `www.menti.com` and type the code:
+
+``6992 9556``
+:::
+
+:::notes
+
+Questions in Mentimeter:
+
+- Do you agree with following statements...
+- What do you associate with "Open Science"? _(word cloud)_
+- What techniques do you practice? _(order several activities)_
+- What techniques do you know of? _(order several activities)_
+
+:::
+
+## Reproducible research
+
+Be open about:
+
+- analysis steps
+- inputs, outputs
+- code used to generate each figure
+- notes
+- versions of software, packages, etc.
+
+> **Share all that can be shared!**
+
+## Task
+
+What have we talked about that would help make these steps reproducible?
+
+:::{.incremental}
+- receiving data (first look)
+- data exploration
+- analysis
+- visualizations
+- preparing paper
+- submitting paper and data    
+:::
+
+## Open Data
+
+- not only _raw input data!_
+
+:::notes
+We're usually not allowed to share our input data, if these come from health
+surveys, health registries, MoBa, genetic measurements, etc.
+
+_However_, we can always share something!
+:::
+
+. . .
+
+- _all_ results
+
+:::notes
+Have you considered what to include in a paper where the space is limited?
+Have you ever thought about how "open" this is?
+
+What did you do with all the other results you produced? How about just sharing
+all that your analyses give out _and_ the code you used to obtain these?
+:::
+
+. . .
+
+- accessible by anyone
+
+:::notes
+So you've created many tables and published them in supplementary material?
+Wonderful! Have you ever thought about how "open" this is?
+:::
+
+## Example {.center}
+
+:::notes
+**Look at these files:**
+
+1. Word document with a stylized table - nice to _watch_, not nice to _work with_
+2. Excel spreadsheet with _two_ tables in one sheet
+3. CSV file and meta-data
+
+The first two are in `extras` folder, the last ones are on [GitHub repo](https://github.com/jromanowska/Norwegian_drug_screening_ATC_level2/tree/main/DATA).
+
+**Questions:**
+
+Which one do you prefer?
+
+Which one is easiest to incorporate in analyses as input?
+
+Which one is easiest to open?
+:::
+
+## Exercise
+
+1. export to a text-file
+
+2. create a table in R/STATA
+
+3. describe your data
+
+4. put on GitHub/Dataverse
+
+
+## Good practice {.center}
+
+1. Share _all_ that you can share
+
+. . .
+
+2. Describe your data
+
+. . .
+
+3. Create text-files, not Excel or Word
+
+. . .
+
+4. (*) Public repository + license
+
+# Reproducible code
+
+## `r fontawesome::fa("r-project")` + `r fontawesome::fa("markdown")` = Rmarkdown
+
+<img src="img/reproducibility_court.png" alt="A judge's desk labeled 'Reproducibility' with a witness stand right next to it. On the witness stand is a smiling and confident R Markdown document pointing at some lines of code on itself. A fuzzy monster lawyer in a polka-dot tie stands proudly saying 'Nothing further!' The judge (also a cute fuzzy monster) is smiling with their hands raised in celebration of reproducible work." style="width: 650px; position: absolute; float: right; right: 5px; bottom: 5px;">
+
+- [newest book](https://bookdown.org/yihui/rmarkdown-cookbook/) "Rmarkdown cookbook"
+- [book from Yihui](https://bookdown.org/yihui/rmarkdown/) (creator of {knitr})
+- [official documentation from RStudio](https://rmarkdown.rstudio.com/)
+
+## <img src="img/quarto.png" alt="Quarto logo">
+
+[Quarto](https://quarto.org/) publishing system
+
+- alternative to Rmarkdown,
+
+- separate from R/RStudio,
+
+- can be used with Python, STATA, JuliaLang, etc.

@@ -1,0 +1,218 @@
+---
+title: "Exercises"
+author: "Julia Romanowska"
+format:
+  html:
+    toc: true
+    code-fold: show
+    number-sections: true
+---
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(gtsummary)
+library(fontawesome)
+```
+
+## Introduction
+
+`r fa("clipboard-question")` What we'll learn today?
+
+1. export data to a text-file
+
+2. create a table in R/STATA
+
+3. describe your data
+
+4. put on GitHub/Dataverse
+
+## What is a text file? {#sec-what-is-text-file}
+
+> Files produced by default by Word or Excel are _binary files_, not _text files_!
+
+| text file | not a text file |
+|-----------|-----------------|
+| `.txt`    | `.doc`/`.docx`  |
+| `.csv`    | `.xls`/`.xlsx`  |
+| `.tab`    | `.sav`          |
+
+A text file contains the characters we type _explicitly_, i.e., it can be opened
+and read in, e.g., Notepad.
+
+> **NB:** When exporting a table from Excel to CSV, make sure you did not do
+> any formatting changes (numbers are still numbers) and that you have one
+> table in one sheet.
+
+## Create a table
+
+### Table 1
+
+This table you want to be visually appealing, to put in the submitted paper.
+From the raw data, there are several ways to get to the "Table 1" format,
+while at the same time keeping the code you used to generate it.
+
+> DISCLAIMER: I don't know STATA well, so please advise your local STATA
+> expert when you need help there.
+
+#### In STATA
+
+The newest, STATA 18, has a built-in command you can use to create a nice "Table 1".
+Check [the documentation here](https://www.stata.com/new-in-stata/create-export-descriptive-statistic-tables/).
+
+In older STATA versions, you can use some extra packages, e.g.,
+[`table1_mc`](https://blog.uvm.edu/tbplante/2019/07/11/make-a-table-1-in-stata-in-no-time-with-table1_mc/).
+
+#### In R
+
+One of the packages I use is [{gtsummary}](https://www.danieldsjoberg.com/gtsummary/).
+The webpage has nice tutorials, but basically what it does is a summary of the
+dataset in one go.
+
+```{r}
+#| label: "create table with gtsummary"
+library(gtsummary)
+
+table1 <- tbl_summary(
+    trial,
+    include = c(age, grade, response),
+    by = trt, # split table by group
+    missing = "no" # don't list missing data separately
+  ) %>%
+  add_n() %>% # add column with total number of non-missing observations
+  add_p() %>% # test for a difference between groups
+  modify_header(label = "**Variable**") %>% # update the column header
+  bold_labels()
+table1
+```
+
+You can use the output as is or stylize it with, e.g.,
+[{gt} package](https://gt.rstudio.com/). When you're done, you can export it to
+many formats: `.docx`, `.png`, `.html`, `.rtf`, `.tex`, `.ltx`.
+
+```{r}
+#| label: "export the table"
+#| eval: false
+table1 %>%
+  as_gt() %>%
+  gt::gtsave(filename = "tab01_study_pop_description.docx")
+```
+
+### Any table with results
+
+On the other hand, when you have some results, you would like to save them in a
+file format that can be easily read by anyone, even without access to Word or
+Excel. Moreover, when you want to import a dataset to analyze it, it is always
+much easier to import a text file (see @sec-what-is-text-file).
+
+Importantly, the exported results should be _raw_, i.e.:
+
+- numbers are numbers (e.g., "1e-05" in a p-value column is not a number),
+- numbers are not rounded (e.g., "<0.05" in a p-value column),
+- dates are in ISO format ("YYY-MM-DD").
+
+> When sharing your results as a supplementary material to a publication, make
+> sure you're sharing raw results in a text file.
+
+#### In STATA
+
+After collecting the results from your analysis (with the `collect` command), 
+use the command `outsheet`. You can read about this command in the 
+[official documentation](http://www.stata.com/help.cgi?outsheet) and in
+[a short tutorial](https://stats.oarc.ucla.edu/stata/faq/how-do-i-export-stata-dta-files-to-comma-separated-files/).
+
+#### In R
+
+> I recommend using [{tidyverse}](https://www.tidyverse.org/) and
+> [{here}](https://here.r-lib.org/) packages.
+
+{here} package will help you define the path to the files based only on your
+current project "home" location, so that you don't have to think if the files
+are saved on `C:/My strange location` or maybe `S:/My other folder`.
+
+{tidyverse} is a group of packages, where one of them, {readr}, handles reading
+and writing files very nicely. To save a .csv file, write:
+
+```{r}
+#| eval: false
+library(readr) # or: library(tidyverse)
+
+write_csv(
+  object,
+  file = here("RESULTS", "01_linreg_no_adj_results.csv")
+)
+```
+
+This will write your `object` to the file under the directory "RESULTS". If you
+prefer a tab-delimited file instead, use `write_delim()` function.
+
+If using _base R_, just write:
+
+```{r}
+#| eval: false
+write.csv(
+  object,
+  file = here("RESULTS", "01_linreg_no_adj_results.csv"),
+  row.names = FALSE
+)
+```
+
+## Describe your data
+
+Now, that you have exported your results into a simple text file, don't stop
+there! The data is not yet ready to be published because there might be 
+column names that are not understandable, categorical data that is represented
+as numbers, or special issues with data that needs explanation before one can
+proceed with their analysis.
+
+Therefore... **metadata** is as important as the raw data!
+
+Create a short document (in Word, in Markdown, in HTML - whatever you prefer)
+where you explain everything that you know about this data.
+
+For good examples, checkout the
+[{medicaldata}](https://higgi13425.github.io/medicaldata/index.html) package.
+In R, all the available datasets have an explanation which you can view by
+using `?` command, e.g.,
+
+```{r}
+#| eval: false
+?medicaldata::covid_testing
+```
+
+## (*) Put on GitHub/Dataverse
+
+When you're done with all that, you can add the produced files to the
+supplementary material where you publish the paper. However, you can always
+make it more discoverable by publishing in a public **repository**.
+
+[GitHub](https://github.com/)/[GitLab](https://git.app.uib.no/) is a service
+where you can store files _and_ their versions,
+with history of changes. It's therefore useful to start a repository when you
+start your analysis (it can be a private repository), so that you know what has
+been done.
+
+[Dataverse](https://dataverse.no/dataverse/uib) is a database where you can
+store and share data/results and get a citable DOI.
+
+> We should include a license so that other people can re-use our data/code!
+
+### Note about licences
+
+A license is describing how the data and/or code can be used by another person.
+A code/data without a license is useless because by default, it is assumed
+that the copyright is restricted.
+
+- check e.g., [Presentation on FAIR data](https://zenodo.org/records/5553307#.Ywic19VBxrl)
+- [Tutorial on licensing](https://gw-ospo.github.io/oss-licensing/intro.html)
+- [OSI approved licenses](https://opensource.org/licenses)
+
+## Read and explore more
+
+- [What is 'good data'?](https://frictionlessdata.io/introduction/)
+- [https://create.frictionlessdata.io/](https://create.frictionlessdata.io/) - app to help annotate datasets
+- `r fa("book-open", fill = "navy")` [How to create good datasets, even in Excel](https://www.tandfonline.com/doi/full/10.1080/00031305.2017.1375989)
+- `r fa("book-open", fill = "navy")` [How to share data with a statistician](https://amstat.tandfonline.com/doi/full/10.1080/00031305.2017.1375987)
+- `r fa("book-open", fill = "navy")` [Building reproducible analytical pipelines with R](https://raps-with-r.dev/) by Bruno Rodrigues
+
