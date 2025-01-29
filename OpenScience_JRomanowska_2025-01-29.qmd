@@ -46,7 +46,7 @@ Be open about:
 
 ## Task
 
-What have we talked about that would help make these steps reproducible?
+What would help make these steps reproducible?
 
 :::{.incremental}
 - receiving data (first look)
@@ -55,6 +55,23 @@ What have we talked about that would help make these steps reproducible?
 - visualizations
 - preparing paper
 - submitting paper and data    
+:::
+
+:::notes
+
+- receiving data (first look)    
+_copy and store original data untouched!_
+- data exploration    
+_tidy data_
+- analysis    
+_make scripts and functions_
+- visualizations    
+_use scripts, don't change the graph by hand!_
+- preparing paper    
+_(will be talking about this today!) Rmarkdown_
+- submitting paper and data    
+_create a repository, share_
+
 :::
 
 ## Open Data
@@ -155,3 +172,5 @@ Which one is easiest to open?
 - separate from R/RStudio,
 
 - can be used with Python, STATA, JuliaLang, etc.
+
+# Quarto Hands-on
